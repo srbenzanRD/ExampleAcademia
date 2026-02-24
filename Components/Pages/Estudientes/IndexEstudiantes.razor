@@ -1,0 +1,37 @@
+@page "/estudiantes"
+
+<h1>Estudiantes</h1>
+<p>Aquí puedes ver la lista de estudiantes registrados en la academia.</p>
+
+@* Aquí se mostrarán los estudiantes obtenidos del servicio *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Matricula</th>
+            <th>Estudiante</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var estudiante in estudiantes)
+        {
+            <tr>
+                <td>@estudiante.Id</td>
+                <td>@estudiante.Matricula</td>
+                <td>@estudiante.Nombre</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Estudiante> estudiantes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Obtenemos la lista de estudiantes desde el servicio
+        estudiantes =  estudianteService.GetAll();
+        
+        await base.OnInitializedAsync();
+    }
+}
