@@ -64,6 +64,11 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+#region Migracion y creacion de la base de datos (AutoCreate)
+var db = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+db.Database.EnsureCreated();
+#endregion Migracion y creacion de la base de datos (AutoCreate)
+
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
