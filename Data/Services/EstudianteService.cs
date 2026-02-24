@@ -52,4 +52,18 @@ public class EstudianteService
         _context.Estudiantes.Update(estudiante);
         return _context.SaveChanges() > 0;
     }
+/// <summary>
+/// Elimina un estudiante de la base de datos por su Id
+/// </summary>
+/// <param name="id">El Id del estudiante a eliminar</param>
+/// <returns>True si el estudiante se eliminó correctamente, false en caso contrario</returns>
+    public bool Delete(int id)
+    {
+        var estudiante = _context.Estudiantes.FirstOrDefault(x => x.Id == id);
+        if (estudiante == null)
+            return false;
+
+        _context.Estudiantes.Remove(estudiante);
+        return _context.SaveChanges() > 0;
+    }
 }
