@@ -1,8 +1,15 @@
 @page "/estudiantes"
 @rendermode InteractiveServer
-
+@if(ShowForm){
+    <div class="container py-4">
+        
+    </div>
+    return;
+}
 <div class="container py-4">
-    <h1 class="text-primary mb-3">Estudiantes</h1>
+    <h1 class="text-primary mb-3">Estudiantes
+        <button class="btn btn-outline-success">Agregar</button>
+        </h1>
     <p class="text-muted mb-4">Aquí puedes ver la lista de estudiantes registrados en la academia.</p>
 
     <div class="card shadow-sm border-0">
@@ -45,6 +52,7 @@
 </div>
 
 @code {
+    private bool ShowForm = false;
     private Estudiante model = new Estudiante();
     private List<Estudiante> estudiantes = [];
 
