@@ -1,3 +1,4 @@
+using ExampleAcademia.Components.ViewModel;
 using ExampleAcademia.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,10 +17,16 @@ public class EstudianteService
 /// Obtiene una lista de todos los estudiantes en la base de datos
 /// </summary>
 /// <returns>Una lista de estudiantes</returns>
-    public List<Estudiante> GetAll()
+    public List<EstudianteViewModel> GetAll()
     {
         return _context.Estudiantes
         .AsNoTracking()
+        .Select(x => new EstudianteViewModel
+        {
+            Id = x.Id,
+            Matricula = x.Matricula,
+            Nombre = x.Nombre
+        })
         .ToList();
     }
 
@@ -28,18 +35,32 @@ public class EstudianteService
 /// </summary>
 /// <param name="id">El Id del estudiante</param>
 /// <returns>El estudiante correspondiente al Id proporcionado, o null si no se encuentra</returns>
-    public Estudiante? GetById(int id)
+    public EstudianteViewModel? GetById(int id)
     {
-        return _context.Estudiantes.FirstOrDefault(x => x.Id == id);
+        var estudiante = _context.Estudiantes.FirstOrDefault(x => x.Id == id);
+        if (estudiante == null)
+            return null;
+
+        return new EstudianteViewModel
+        {
+            Id = estudiante.Id,
+            Matricula = estudiante.Matricula,
+            Nombre = estudiante.Nombre
+        };
     }
 /// <summary>
 /// Crea un nuevo estudiante en la base de datos
 /// </summary>
 /// <param name="estudiante">El estudiante a crear</param>
 /// <returns>True si el estudiante se creó correctamente, false en caso contrario</returns>
-    public bool Create(Estudiante estudiante)
+    public bool Create(EstudianteViewModel estudiante)
     {
-        _context.Estudiantes.Add(estudiante);
+        var entity = new Estudiante
+        {
+            Matricula = estudiante.Matricula,
+            Nombre = estudiante.Nombre
+        };
+        _context.Estudiantes.Add(entity);
         return _context.SaveChanges() > 0;
     }
 /// <summary>
@@ -47,9 +68,18 @@ public class EstudianteService
 /// </summary>
 /// <param name="estudiante">El estudiante a actualizar</param>
 /// <returns>True si el estudiante se actualizó correctamente, false en caso contrario</returns>
-    public bool Update(Estudiante estudiante)
+    public bool Update(EstudianteViewModel estudiante)
     {
-        _context.Estudiantes.Update(estudiante);
+        var entity = _context.Estudiantes
+        .FirstOrDefault(x => x.Id == estudiante.Id);
+
+        if (entity == null)
+            return false;
+
+        entity.Matricula = estudiante.Matricula;
+        entity.Nombre = estudiante.Nombre;
+
+        _context.Estudiantes.Update(entity);
         return _context.SaveChanges() > 0;
     }
 /// <summary>

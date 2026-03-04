@@ -45,8 +45,10 @@
 </div>
 
 @code {
-    private Estudiante model = new Estudiante();
-    private List<Estudiante> estudiantes = [];
+    private EstudianteViewModel model = new ();
+
+    private List<EstudianteViewModel> estudiantes = [];
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,7 +60,7 @@
 
     private void LimpiarFormulario()
     {
-        model = new Estudiante();
+        model = new ();
     }
     
     private void AgregarEstudiante()
