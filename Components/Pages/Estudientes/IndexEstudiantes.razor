@@ -1,8 +1,27 @@
 @page "/estudiantes"
 @rendermode InteractiveServer
 
+@if(ShowForm){
+    <div class="container py-4">
+        <EditForm FormName="estudianteFrm" Model="@model">
+            <div class="mb-3">
+                <label for="matricula" class="form-label">Matrícula</label>
+                <input type="text" class="form-control" id="matricula" @bind="model.Matricula">
+            </div>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" @bind="model.Nombre">
+            </div>
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+            <button type="button" class="btn btn-secondary" @onclick="LimpiarFormulario">Cancelar</button>
+        </EditForm>
+    </div>
+
+    return;
+}
+
 <div class="container py-4">
-    <h1 class="text-primary mb-3">Estudiantes</h1>
+    <h1 class="text-primary mb-3">Estudiantes<button class="btn btn-sm btn-success ms-2" @onclick="MostrarFormulario">+</button></h1>
     <p class="text-muted mb-4">Aquí puedes ver la lista de estudiantes registrados en la academia.</p>
 
     <div class="card shadow-sm border-0">
@@ -45,6 +64,7 @@
 </div>
 
 @code {
+    private bool ShowForm = false;
     private EstudianteViewModel model = new ();
 
     private List<EstudianteViewModel> estudiantes = [];
@@ -61,6 +81,11 @@
     private void LimpiarFormulario()
     {
         model = new ();
+        ShowForm = false;
+    }
+    private void MostrarFormulario()
+    {
+        ShowForm = true;
     }
     
     private void AgregarEstudiante()
