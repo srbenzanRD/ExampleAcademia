@@ -1,6 +1,23 @@
 @page "/estudiantes"
 @rendermode InteractiveServer
-
+@if(ShowForm){
+    <EditForm FormName="frmEstudiante" Model="@model" OnValidSubmit="AgregarEstudiante">
+        <DataAnnotationsValidator />
+        <div class="mb-3">
+            <label class="form-label">Matricula</label>
+            <input class="form-control" @bind="model.Matricula"/>
+            <ValidationMessage For="()=> model.Matricula" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" @bind="model.Nombre"/>
+            <ValidationMessage For="()=> model.Nombre" />
+        </div>
+        <button type="submit" class="btn btn-success">Aceptar</button>
+        <button type="button" class="btn btn-danger">Cancelar</button>
+    </EditForm>
+    return;
+}
 <div class="container py-4">
     <h1 class="text-primary mb-3">Estudiantes</h1>
     <p class="text-muted mb-4">Aquí puedes ver la lista de estudiantes registrados en la academia.</p>
@@ -45,6 +62,7 @@
 </div>
 
 @code {
+    private bool ShowForm = true;
     private EstudianteViewModel model = new ();
 
     private List<EstudianteViewModel> estudiantes = [];
@@ -61,11 +79,17 @@
     private void LimpiarFormulario()
     {
         model = new ();
+        ShowForm = false;
     }
     
     private void AgregarEstudiante()
     {
         // Lógica para agregar un nuevo estudiante
+        if(estudianteService.Create(model))
+        {
+            LimpiarFormulario();
+            estudiantes = estudianteService.GetAll();
+        }
     }
     private void EditarEstudiante(int id)
     {
